@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="CPP_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/NativeType.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/MathlibraCriticalException.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/MathlibraException.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/mathlibra_NativeType.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Mathlibra.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/mathlibra_Mathlibra.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/NativeComponents.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/mathlibra_FunctionData.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/mathlibra_MathlibraException.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FunctionData.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/NativeComponents.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/mathlibra_MathlibraCriticalException.h" isTestSource="false" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="Header Search Paths">
+        <CLASSES>
+          <root url="file:///usr/lib/jvm/java-8-openjdk-amd64/include" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include-fixed" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include" />
+          <root url="file:///usr/include" />
+          <root url="file:///usr/local/include" />
+          <root url="file://$MODULE_DIR$/../mathlibra_include" />
+        </CLASSES>
+        <SOURCES>
+          <root url="file:///usr/lib/jvm/java-8-openjdk-amd64/include" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include-fixed" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include" />
+          <root url="file:///usr/include" />
+          <root url="file:///usr/local/include" />
+          <root url="file://$MODULE_DIR$/../mathlibra_include" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+  </component>
+</module>
