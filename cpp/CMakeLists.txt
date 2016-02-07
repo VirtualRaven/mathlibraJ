@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.2)
 project(mathlibraJ)
 include(ExternalProject)
-link_directories(${CMAKE_INSTALL_PREFIX}/lib/)
+link_directories(${CMAKE_CURRENT_BINARY_DIR}/lib/)
         SET(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_BINARY_DIR}" CACHE PATH "Install prefix" FORCE)
 
 include_directories( "$(JAVA_HOME)/include" "$(JAVA_HOME)/include/linux")

@@ -276,5 +276,6 @@ JNIEXPORT void JNICALL Java_mathlibra_Mathlibra_setVariable
 JNIEXPORT jstring JNICALL Java_mathlibra_Mathlibra_getVersion
         (JNIEnv * env, jclass c)
 {
-    return env->NewStringUTF("TEST");
+    std::string tmp =std::string(LibVersion()).append(std::string(LibSHA()));
+    return env->NewStringUTF(tmp.c_str());
 }
