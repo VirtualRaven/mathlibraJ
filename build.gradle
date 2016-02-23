@@ -1,0 +1,88 @@
+apply plugin: "cpp"
+project.ext.JAVA_JDK = System.getenv("JAVA_HOME")
+print project.JAVA_JDK
+if (JAVA_JDK == null)
+	throw new GradleException("JAVA_HOME undefined, set it to point to the jdk folder")
+
+configurations{
+	external
+}
+
+repositories{
+	ivy{
+ 		ivyPattern      'http://build.rahmn.net:8080/guestAuth/repository/download/[module]/[revision]/teamcity-ivy.xml'
+        	artifactPattern 'http://build.rahmn.net:8080/guestAuth/repository/download/[module]/[revision]/[artifact](.[ext])'
+	}
+}
+
+dependencies {
+	external('org:Mathlibra_BuildMaster:lastSuccessful') {
+		artifact {
+			name= 'mathlibra'
+			type= 'zip'
+		}
+	}
+}
+
+task copyDependency(type: Copy){
+	def zipPath =configurations.external.find {it.name.startsWith("mathlibra")}
+	from zipTree(file(zipPath))
+	into "$buildDir/download/"
+}	
+
+
+model{
+	buildTypes{
+		debug
+		release
+	}
+  	binaries{
+	all{
+		println it.name
+          if(toolChain in Gcc)
+          {
+		
+                  if(buildType == buildTypes.release)
+                  {
+                          cppCompiler.args "-std=c++11", "-O2", "-Wall", "-pedantic", "-I$rootProject.JAVA_JDK/include", "-I$rootProject.JAVA_JDK/include/$targetPlatform.operatingSystem.name"
+                          linker.args "-ldl"
+                  }
+                  else
+                  {
+                          cppCompiler.args "-std=c++11", "-Wall", "-pedantic", "-g","-I$rootProject.JAVA_JDK/include", "-I$rootProject.JAVA_JDK/include/$targetPlatform.operatingSystem.name"
+
+                          linker.args "-ldl"
+                  }
+        }
+	}
+	}
+	components {
+		
+		
+		mathlibraJ(NativeLibrarySpec){
+			binaries.withType(StaticLibraryBinarySpec){bin -> bin.buildable= false}
+			binaries.all
+			{
+				if(toolChain in Gcc)
+				{
+					cppCompiler.args "-I$buildDir/download/mathlibra_CXX/include/"
+					print buildType
+					linker.args "-lmathlibra_CXX","-L$buildDir/download/mathlibra_CXX/shared/release/"
+				}
+			}
+			sources{
+				cpp{
+					source{
+						srcDirs "cpp/"
+						include "**/*.cpp"
+					}
+					exportedHeaders {
+						srcDirs "cpp/"
+						include "**/*.cpp"
+					}
+					builtBy copyDependency
+				}
+			}
+		}
+	}
+}
