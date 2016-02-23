@@ -1,4 +1,4 @@
-package mathlibra;
+package net.rahmn.mathlibra;
 
 /**
  * Created by raven on 2016-01-26.

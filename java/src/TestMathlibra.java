@@ -1,4 +1,4 @@
-import mathlibra.*;
+import net.rahmn.mathlibra.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class TestMathlibra
     {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
-        mathlibra.Mathlibra x = new mathlibra.Mathlibra();
+        Mathlibra x = new Mathlibra();
         try {
             System.out.print("Printing function table...\n");
             for (FunctionData d : x.getFunctions()) {
