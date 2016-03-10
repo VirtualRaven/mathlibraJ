@@ -10,8 +10,8 @@ configurations{
 
 repositories{
 	ivy{
- 		ivyPattern      'https://build.rahmn.net/guestAuth/repository/download/[module]/[revision]/teamcity-ivy.xml'
-        	artifactPattern 'https://build.rahmn.net/guestAuth/repository/download/[module]/[revision]/[artifact](.[ext])'
+ 		ivyPattern      'http://build.rahmn.net:8080/guestAuth/repository/download/[module]/[revision]/teamcity-ivy.xml'
+        	artifactPattern 'http://build.rahmn.net:8080/guestAuth/repository/download/[module]/[revision]/[artifact](.[ext])'
 	}
 }
 
@@ -140,7 +140,6 @@ model{
                   else
                   {
                           cppCompiler.args "-std=c++11", "-Wall", "-pedantic", "-g","-I$rootProject.JAVA_JDK/include", "-I$rootProject.JAVA_JDK/include/$targetPlatform.operatingSystem.name"
-
                           linker.args "-ldl"
                   }
         }
