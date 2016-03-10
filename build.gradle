@@ -164,7 +164,7 @@ model{
 				if(toolChain in Gcc)
 				{
 					cppCompiler.args "-I$buildDir/download/mathlibra_CXX/include/"
-					linker.args "-lmathlibra_CXX","-L$buildDir/download/mathlibra_CXX/shared/$targetPlatform.getName()/release/"
+					linker.args "-lmathlibra_CXX","-L$buildDir/download/mathlibra_CXX/shared/$targetPlatform.name/release/"
 				}
 			}
 			sources{
