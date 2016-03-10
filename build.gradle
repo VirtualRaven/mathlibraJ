@@ -32,18 +32,108 @@ task copyDependency(type: Copy){
 
 
 model{
+
+	toolChains {
+		arm(Gcc){
+			if (project.hasProperty('ndktoolchain'))
+				path project.properties['ndktoolchain']
+			target("armeabiv7a")
+		}
+		armclang(Clang){
+			if (project.hasProperty('ndktoolchain'))
+				path project.properties['ndktoolchain']
+			target("armeabiv7a")
+		}
+		
+		gcc(Gcc){
+			target("linux_x86"){
+			
+				cppCompiler.withArguments { args ->
+					args << "-m32" 
+				}
+				linker.withArguments { args ->
+					args << "-m32" 
+				}
+			}
+			target("linux_x64"){
+				cppCompiler.withArguments { args ->
+					args << "-m64" 
+				}
+				linker.withArguments { args ->
+					args << "-m64" 
+				}
+			}
+		}
+		mingw(Gcc){
+				target("windows_x86")
+				target("windows_x64")
+		}
+		clang(Clang){
+			target("osx_x86")
+			target("osx_x64")
+		}
+		
+	}
+	
+	platforms {
+		armeabiv7a{
+			architecture "arm"
+			operatingSystem "linux"
+		}
+		linux_x86{
+			architecture "x86"
+			operatingSystem "linux"
+		}
+		linux_x64{
+			architecture "x86_64"
+			operatingSystem "linux"
+		}
+		windows_x86 {
+                 architecture "x86"
+                 operatingSystem "windows"
+        }
+        windows_x64 {
+                 architecture "x86_64"
+                 operatingSystem "windows"
+        }
+        osx_x86 {
+                 architecture "x86"
+                 operatingSystem "osx"
+        }
+        osx_x64 {
+                 architecture "x86_64"
+                 operatingSystem "osx"
+        }
+        current{
+		}
+	}	
+
 	buildTypes{
 		debug
 		release
 	}
   	binaries{
 	all{
-		println it.name
+			if(!((targetPlatform.getName() == "current") || (project.hasProperty(targetPlatform.getName())))){
+				buildable = false
+			}	
+			if (targetPlatform == platforms.current){
+				for(NativePlatform p : platforms){
+					if(project.hasProperty(p.getName())){
+						buildable = false
+					}
+				}
+			}
+			if (buildable && targetPlatform.getName()=="armeabiv7a" && !project.hasProperty('ndktoolchain')){
+				buildable = false
+				throw new GradleException("No ndktoolchain set")
+			}
           if(toolChain in Gcc)
           {
 		
                   if(buildType == buildTypes.release)
                   {
+
                           cppCompiler.args "-std=c++11", "-O2", "-Wall", "-pedantic", "-I$rootProject.JAVA_JDK/include", "-I$rootProject.JAVA_JDK/include/$targetPlatform.operatingSystem.name"
                           linker.args "-ldl"
                   }
@@ -60,14 +150,21 @@ model{
 		
 		
 		mathlibraJ(NativeLibrarySpec){
+			targetPlatform "armeabiv7a"
+			targetPlatform "linux_x86"
+			targetPlatform "linux_x64"
+			targetPlatform "windows_x86"
+			targetPlatform "windows_x64"
+			targetPlatform "osx_x86"
+			targetPlatform "osx_x64"
+			targetPlatform "current"
 			binaries.withType(StaticLibraryBinarySpec){bin -> bin.buildable= false}
 			binaries.all
 			{
 				if(toolChain in Gcc)
 				{
 					cppCompiler.args "-I$buildDir/download/mathlibra_CXX/include/"
-					print buildType
-					linker.args "-lmathlibra_CXX","-L$buildDir/download/mathlibra_CXX/shared/release/"
+					linker.args "-lmathlibra_CXX","-L$buildDir/download/mathlibra_CXX/shared/armeabiv7a/release/"
 				}
 			}
 			sources{
