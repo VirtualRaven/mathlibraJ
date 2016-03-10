@@ -10,8 +10,8 @@ configurations{
 
 repositories{
 	ivy{
- 		ivyPattern      'http://build.rahmn.net:8080/guestAuth/repository/download/[module]/[revision]/teamcity-ivy.xml'
-        	artifactPattern 'http://build.rahmn.net:8080/guestAuth/repository/download/[module]/[revision]/[artifact](.[ext])'
+ 		ivyPattern      'https://build.rahmn.net/guestAuth/repository/download/[module]/[revision]/teamcity-ivy.xml'
+        	artifactPattern 'https://build.rahmn.net/guestAuth/repository/download/[module]/[revision]/[artifact](.[ext])'
 	}
 }
 
