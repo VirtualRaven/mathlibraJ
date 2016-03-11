@@ -5,6 +5,9 @@
 #include "mathlibra_Mathlibra.h"
 #include "NativeComponents.h"
 #include "export.h"
+
+
+
 JNIEXPORT void JNICALL Java_mathlibra_Mathlibra_initNativeComponents
   (JNIEnv *env, jclass c)
 {
@@ -64,10 +67,10 @@ JNIEXPORT jobject JNICALL Java_mathlibra_Mathlibra_executeArg
     else {
         tmp.release();
         return env->NewObject(NativeComponents::NativeType,
-                       NativeComponents::NativeTypeC,
-                       tmp.ptr(),
-                       JNI_FALSE);
-    }
+				NativeComponents::NativeTypeC,
+				reinterpret_cast<jlong>(tmp.ptr()),
+				static_cast<jboolean>(JNI_FALSE));
+	}
 }
 JNIEXPORT jobjectArray JNICALL Java_mathlibra_Mathlibra_getFunctionNames
         (JNIEnv * env, jobject o)
@@ -178,7 +181,7 @@ JNIEXPORT jobject JNICALL Java_mathlibra_Mathlibra_getVariable
         return env->NewObject(NativeComponents::NativeType,
                               NativeComponents::NativeTypeC,
                               reinterpret_cast<jlong>(tmp.value),
-                              JNI_TRUE);
+                              static_cast<jboolean>(JNI_TRUE));
     }
 }
 JNIEXPORT jboolean JNICALL Java_mathlibra_Mathlibra_isVariableDefined
