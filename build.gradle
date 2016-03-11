@@ -39,12 +39,6 @@ model{
 				path project.properties['ndktoolchain']
 			target("armeabiv7a")
 		}
-		armclang(Clang){
-			if (project.hasProperty('ndktoolchain'))
-				path project.properties['ndktoolchain']
-			target("armeabiv7a")
-		}
-		
 		gcc(Gcc){
 			target("linux_x86"){
 			
