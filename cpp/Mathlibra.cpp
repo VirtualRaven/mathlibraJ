@@ -6,7 +6,7 @@
 #include "NativeComponents.h"
 #include "export.h"
 
-#define APPNAME "Sigma"
+
 
 JNIEXPORT void JNICALL Java_mathlibra_Mathlibra_initNativeComponents
   (JNIEnv *env, jclass c)
