@@ -1,5 +1,46 @@
 apply plugin: "cpp"
 project.ext.JAVA_JDK = System.getenv("JAVA_HOME")
+
+def getCurrent(){
+    def osname = System.getProperty("os.name")
+    def osarch = System.getProperty("os.arch")
+    def current_target_string=""
+    if(osname.contains("Windows")){
+        if(osarch.endsWith("64"))
+        {
+            current_taget_string="windows_x64" 
+        }
+        else if (osarch.endsWith("32"))
+        {
+            current_target_string="windows_x86"
+        }
+    }
+    else if(osname.toLowerCase().contains("linux")){
+            if(osarch.endsWith("64"))
+            {
+                current_target_string="linux_x64"
+            }
+            else if(osarch.endsWith("32"))
+            {
+                current_target_string="linux_x32"
+            }
+    }
+    else if(osname.toLowerCase().contains("osx")){
+            if(osarch.endsWith("64"))
+            {
+                current_target_string="osx_x64"
+            }
+            else if(osarch.endsWith("32"))
+            {
+                current_target_string="osx_x32"
+            }
+    }
+    if(current_target_string==""){
+        throw new GradleScriptException("Failed to determine current platform")
+    }
+    return current_target_string
+}
+
 print project.JAVA_JDK
 if (JAVA_JDK == null)
 	throw new GradleException("JAVA_HOME undefined, set it to point to the jdk folder")
@@ -128,12 +169,12 @@ model{
                   if(buildType == buildTypes.release)
                   {
 
-                          cppCompiler.args "-std=c++11", "-O2", "-Wall", "-pedantic", "-I$rootProject.JAVA_JDK/include", "-I$rootProject.JAVA_JDK/include/$targetPlatform.operatingSystem.name"
+                          cppCompiler.args "-std=c++11", "-O2", "-Wall", "-pedantic", "-I$rootProject.JAVA_JDK/include", "-I$rootProject.JAVA_JDK/include/" + targetPlatform.operatingSystem.name.toLowerCase()
                           linker.args "-ldl"
                   }
                   else
                   {
-                          cppCompiler.args "-std=c++11", "-Wall", "-pedantic", "-g","-I$rootProject.JAVA_JDK/include", "-I$rootProject.JAVA_JDK/include/$targetPlatform.operatingSystem.name"
+                          cppCompiler.args "-std=c++11", "-Wall", "-pedantic", "-g","-I$rootProject.JAVA_JDK/include", "-I$rootProject.JAVA_JDK/include/" + targetPlatform.operatingSystem.name.toLowerCase()
                           linker.args "-ldl"
                   }
         }
@@ -157,7 +198,7 @@ model{
 				if(toolChain in Gcc)
 				{
 					cppCompiler.args "-I$buildDir/download/mathlibra_CXX/include/"
-					linker.args "-lmathlibra_CXX","-L$buildDir/download/mathlibra_CXX/shared/$targetPlatform.name/release/"
+					linker.args "-lmathlibra_CXX","-L$buildDir/download/mathlibra_CXX/shared/" +getCurrent() + "/release/"
 				}
 			}
 			sources{
