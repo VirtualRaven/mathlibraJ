@@ -198,7 +198,7 @@ model{
 				if(toolChain in Gcc)
 				{
 					cppCompiler.args "-I$buildDir/download/mathlibra_CXX/include/"
-                                        if(buildTarget == buildTargets.current){
+                                        if(targetPlatform == platforms.current){
 					    linker.args "-lmathlibra_CXX","-L$buildDir/download/mathlibra_CXX/shared/" +getCurrent() + "/release/"
                                         }
                                         else{
