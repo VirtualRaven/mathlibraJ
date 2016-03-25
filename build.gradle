@@ -1,4 +1,8 @@
+
+apply plugin: 'jvm-component'
+apply plugin: 'java-lang'
 apply plugin: "cpp"
+
 project.ext.JAVA_JDK = System.getenv("JAVA_HOME")
 
 def getCurrent(){
@@ -51,8 +55,11 @@ configurations{
 
 repositories{
 	ivy{
- 		ivyPattern      'http://build.rahmn.net:8080/guestAuth/repository/download/[module]/[revision]/teamcity-ivy.xml'
-        	artifactPattern 'http://build.rahmn.net:8080/guestAuth/repository/download/[module]/[revision]/[artifact](.[ext])'
+                url 'https://build.rahmn.net/guestAuth/repository/download?branch=master'
+                layout "pattern", {
+ 		ivy      '[module]/[revision]/teamcity-ivy.xml'
+        	artifact '[module]/[revision]/[artifact](.[ext])'
+                }
 	}
 }
 
@@ -73,6 +80,19 @@ task copyDependency(type: Copy){
 
 
 model{
+        tasks{
+            currentLibs(Copy){
+                   dependsOn $.binaries.withType(SharedLibraryBinarySpec).findAll(
+                                    {
+                                        it.targetPlatform.name.contains("current") && 
+                                        it.toString().contains("mathlibraJ") && 
+                                        it.buildType.name.contains("release")
+                                    })
+                from "$buildDir/download/mathlibra_CXX/shared/" +getCurrent() + "/release/"                
+                from "$buildDir/libs/mathlibraJ/shared/current/release/"
+                into "$buildDir/currentLibs/"
+            }
+        }
 
 	toolChains {
 		arm(Gcc){
@@ -181,7 +201,13 @@ model{
 	}
 	}
 	components {
-		
+	        mathlibraJAPI(JvmLibrarySpec){
+                        sources {
+                            jsource(JavaSourceSet) {
+                                    source.srcDir "java/src"
+                                }   
+                            }
+                }
 		
 		mathlibraJ(NativeLibrarySpec){
 			targetPlatform "armeabiv7a"
@@ -199,7 +225,7 @@ model{
 				{
 					cppCompiler.args "-I$buildDir/download/mathlibra_CXX/include/"
                                         if(targetPlatform == platforms.current){
-					    linker.args "-lmathlibra_CXX","-L$buildDir/download/mathlibra_CXX/shared/" +getCurrent() + "/release/"
+					    linker.args "-lmathlibra_CXX","-L$buildDir/download/mathlibra_CXX/shared/" +getCurrent() + "/release/",  "-Wl,-rpath,./build/currentLibs"
                                         }
                                         else{
                                             linker.args "-lmathlibra_CXX","-L$buildDir/download/mathlibra_CXX/shared/$targetPlatform.name/release/"
