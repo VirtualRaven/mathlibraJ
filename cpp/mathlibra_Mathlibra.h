@@ -12,7 +12,7 @@ extern "C" {
  * Method:    initNativeComponents
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_mathlibra_Mathlibra_initNativeComponents
+JNIEXPORT void JNICALL Java_net_rahmn_mathlibra_Mathlibra_initNativeComponents
   (JNIEnv *, jclass);
 
 /*
@@ -20,7 +20,7 @@ JNIEXPORT void JNICALL Java_mathlibra_Mathlibra_initNativeComponents
  * Method:    createInstance
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_mathlibra_Mathlibra_createInstance
+JNIEXPORT jlong JNICALL Java_net_rahmn_mathlibra_Mathlibra_createInstance
   (JNIEnv *, jclass);
 
 /*
@@ -28,7 +28,7 @@ JNIEXPORT jlong JNICALL Java_mathlibra_Mathlibra_createInstance
  * Method:    freeInstance
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_mathlibra_Mathlibra_freeInstance
+JNIEXPORT void JNICALL Java_net_rahmn_mathlibra_Mathlibra_freeInstance
   (JNIEnv *, jclass, jlong);
 
 /*
@@ -36,7 +36,7 @@ JNIEXPORT void JNICALL Java_mathlibra_Mathlibra_freeInstance
  * Method:    setArg
  * Signature: (Ljava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_mathlibra_Mathlibra_setArg
+JNIEXPORT void JNICALL Java_net_rahmn_mathlibra_Mathlibra_setArg
   (JNIEnv *, jobject, jstring);
 
 /*
@@ -44,7 +44,7 @@ JNIEXPORT void JNICALL Java_mathlibra_Mathlibra_setArg
  * Method:    interpretArg
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_mathlibra_Mathlibra_interpretArg
+JNIEXPORT void JNICALL Java_net_rahmn_mathlibra_Mathlibra_interpretArg
   (JNIEnv *, jobject);
 
 /*
@@ -52,7 +52,7 @@ JNIEXPORT void JNICALL Java_mathlibra_Mathlibra_interpretArg
  * Method:    executeArg
  * Signature: ()Lmathlibra/NativeType;
  */
-JNIEXPORT jobject JNICALL Java_mathlibra_Mathlibra_executeArg
+JNIEXPORT jobject JNICALL Java_net_rahmn_mathlibra_Mathlibra_executeArg
   (JNIEnv *, jobject);
 
 /*
@@ -60,7 +60,7 @@ JNIEXPORT jobject JNICALL Java_mathlibra_Mathlibra_executeArg
  * Method:    getFunctionNames
  * Signature: ()[Ljava/lang/String;
  */
-JNIEXPORT jobjectArray JNICALL Java_mathlibra_Mathlibra_getFunctionNames
+JNIEXPORT jobjectArray JNICALL Java_net_rahmn_mathlibra_Mathlibra_getFunctionNames
   (JNIEnv *, jobject);
 
 /*
@@ -68,7 +68,7 @@ JNIEXPORT jobjectArray JNICALL Java_mathlibra_Mathlibra_getFunctionNames
  * Method:    getFunctions
  * Signature: ()[Lmathlibra/FunctionData;
  */
-JNIEXPORT jobjectArray JNICALL Java_mathlibra_Mathlibra_getFunctions
+JNIEXPORT jobjectArray JNICALL Java_net_rahmn_mathlibra_Mathlibra_getFunctions
   (JNIEnv *, jobject);
 
 /*
@@ -76,7 +76,7 @@ JNIEXPORT jobjectArray JNICALL Java_mathlibra_Mathlibra_getFunctions
  * Method:    getVariableNames
  * Signature: ()[Ljava/lang/String;
  */
-JNIEXPORT jobjectArray JNICALL Java_mathlibra_Mathlibra_getVariableNames
+JNIEXPORT jobjectArray JNICALL Java_net_rahmn_mathlibra_Mathlibra_getVariableNames
   (JNIEnv *, jobject);
 
 /*
@@ -84,7 +84,7 @@ JNIEXPORT jobjectArray JNICALL Java_mathlibra_Mathlibra_getVariableNames
  * Method:    getVariable
  * Signature: (Ljava/lang/String;)Lmathlibra/NativeType;
  */
-JNIEXPORT jobject JNICALL Java_mathlibra_Mathlibra_getVariable
+JNIEXPORT jobject JNICALL Java_net_rahmn_mathlibra_Mathlibra_getVariable
   (JNIEnv *, jobject, jstring);
 
 /*
@@ -92,7 +92,7 @@ JNIEXPORT jobject JNICALL Java_mathlibra_Mathlibra_getVariable
  * Method:    setVariable
  * Signature: (Ljava/lang/String;Lmathlibra/NativeType;Z)V
  */
-JNIEXPORT void JNICALL Java_mathlibra_Mathlibra_setVariable
+JNIEXPORT void JNICALL Java_net_rahmn_mathlibra_Mathlibra_setVariable
   (JNIEnv *, jobject, jstring, jobject, jboolean);
 
 /*
@@ -100,7 +100,7 @@ JNIEXPORT void JNICALL Java_mathlibra_Mathlibra_setVariable
  * Method:    isVariableDefined
  * Signature: (Ljava/lang/String;)Z
  */
-JNIEXPORT jboolean JNICALL Java_mathlibra_Mathlibra_isVariableDefined
+JNIEXPORT jboolean JNICALL Java_net_rahmn_mathlibra_Mathlibra_isVariableDefined
   (JNIEnv *, jobject, jstring);
 
 /*
@@ -108,7 +108,7 @@ JNIEXPORT jboolean JNICALL Java_mathlibra_Mathlibra_isVariableDefined
  * Method:    isVariableConst
  * Signature: (Ljava/lang/String;)Z
  */
-JNIEXPORT jboolean JNICALL Java_mathlibra_Mathlibra_isVariableConst
+JNIEXPORT jboolean JNICALL Java_net_rahmn_mathlibra_Mathlibra_isVariableConst
   (JNIEnv *, jobject, jstring);
 
 /*
@@ -116,7 +116,7 @@ JNIEXPORT jboolean JNICALL Java_mathlibra_Mathlibra_isVariableConst
  * Method:    clearVariables
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_mathlibra_Mathlibra_clearVariables
+JNIEXPORT void JNICALL Java_net_rahmn_mathlibra_Mathlibra_clearVariables
   (JNIEnv *, jobject);
 
 /*
@@ -124,7 +124,7 @@ JNIEXPORT void JNICALL Java_mathlibra_Mathlibra_clearVariables
  * Method:    enablePlugins
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_mathlibra_Mathlibra_enablePlugins
+JNIEXPORT void JNICALL Java_net_rahmn_mathlibra_Mathlibra_enablePlugins
   (JNIEnv *, jobject);
 
 /*
@@ -132,7 +132,7 @@ JNIEXPORT void JNICALL Java_mathlibra_Mathlibra_enablePlugins
  * Method:    getVersion
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_mathlibra_Mathlibra_getVersion
+JNIEXPORT jstring JNICALL Java_net_rahmn_mathlibra_Mathlibra_getVersion
   (JNIEnv *, jclass);
 
 #ifdef __cplusplus
