@@ -21,6 +21,8 @@ public class NativeType  implements AutoCloseable{
     public native boolean    isSingleton();
     public native boolean    isString();
     public native boolean    isNumber() ;
+    public static native NativeType makeType(double[] list,int n,int m);
+    public static native NativeType makeType(String list);
     /*
      *  Tries to convert the object to an number,
      *
@@ -29,7 +31,7 @@ public class NativeType  implements AutoCloseable{
     public  double toNumber() throws MathlibraException
     {
         if(!isNumber())
-            throw new MathlibraException("Object not convertable to doulbe");
+            throw new MathlibraException("Object not convertible to double");
         else return toNumberN();
     }
     @Override
@@ -39,10 +41,10 @@ public class NativeType  implements AutoCloseable{
      * This constructor is only for implementing the backend,
      * and should never be used by the end user.
      */
-    public NativeType(long handle) throws MathlibraException {
+    private NativeType(long handle) throws MathlibraException {
         this.__handle = copyInstance(handle);
     }
-    public NativeType(long handle,boolean copy) throws MathlibraException
+    private NativeType(long handle,boolean copy) throws MathlibraException
     {
         if(copy)
         {
