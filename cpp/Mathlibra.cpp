@@ -327,6 +327,11 @@ JNIEXPORT jobject JNICALL Java_net_rahmn_mathlibra_Mathlibra_mapN
      if(strc==NULL)
         return NULL;
      auto res = hwn->map(Start,End,Offset,std::string(strc));
+     if(hwn->exceptionOccured())
+     {
+        NativeComponents::mathlibra_throw_jni(env,hwn->get_exception_info());
+        return NULL;
+     }
      env->ReleaseStringUTFChars(str,strc);
      auto buffer =env->NewDirectByteBuffer(res.ptr(),sizeof(double)*(2*(int)((End-Start)/Offset)+2));
      if(buffer==NULL)
