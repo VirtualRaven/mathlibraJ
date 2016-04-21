@@ -13,7 +13,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved)
         return -1;
     }
 
-    NativeComponents::CriticalException=(jclass)genv->NewGlobalRef(genv->FindClass("mathlibra/MathlibraCriticalException"));
+    NativeComponents::CriticalException=(jclass)genv->NewGlobalRef(genv->FindClass("net/rahmn/mathlibra/MathlibraCriticalException"));
     if(NativeComponents::CriticalException == NULL)
     {
         return -1;
@@ -26,7 +26,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved)
     {
         return -1;
     }
-    NativeComponents::Exception=(jclass)genv->NewGlobalRef(genv->FindClass("mathlibra/MathlibraException"));
+    NativeComponents::Exception=(jclass)genv->NewGlobalRef(genv->FindClass("net/rahmn/mathlibra/MathlibraException"));
     if(NativeComponents::Exception==NULL)
     {
         return -1;
@@ -39,7 +39,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved)
     {
         return -1;
     }
-    NativeComponents::FunctionData=(jclass)genv->NewGlobalRef(genv->FindClass("mathlibra/FunctionData"));
+    NativeComponents::FunctionData=(jclass)genv->NewGlobalRef(genv->FindClass("net/rahmn/mathlibra/FunctionData"));
     if(NativeComponents::FunctionData==NULL)
     {
         return -1;
@@ -51,7 +51,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved)
     {
         return -1;
     }
-    NativeComponents::NativeType=(jclass)genv->NewGlobalRef(genv->FindClass("mathlibra/NativeType"));
+    NativeComponents::NativeType=(jclass)genv->NewGlobalRef(genv->FindClass("net/rahmn/mathlibra/NativeType"));
     if(NativeComponents::NativeType == NULL)
     {
         return -1;
@@ -76,7 +76,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved)
     {
         return -1;
     }
-    auto tmp = genv->FindClass("mathlibra/Mathlibra");
+    auto tmp = genv->FindClass("net/rahmn/mathlibra/Mathlibra");
     if(tmp== NULL)
     {
         return -1;

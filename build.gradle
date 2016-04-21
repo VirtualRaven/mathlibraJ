@@ -1,74 +1,235 @@
+
+apply plugin: 'jvm-component'
+apply plugin: 'java-lang'
 apply plugin: "cpp"
+
 project.ext.JAVA_JDK = System.getenv("JAVA_HOME")
-print project.JAVA_JDK
+
+def getCurrent(){
+    def osname = System.getProperty("os.name")
+    def osarch = System.getProperty("os.arch")
+    def current_target_string=""
+    if(osname.contains("Windows")){
+        if(osarch.endsWith("64"))
+        {
+            current_taget_string="windows_x64" 
+        }
+        else if (osarch.endsWith("32"))
+        {
+            current_target_string="windows_x86"
+        }
+    }
+    else if(osname.toLowerCase().contains("linux")){
+            if(osarch.endsWith("64"))
+            {
+                current_target_string="linux_x64"
+            }
+            else if(osarch.endsWith("32"))
+            {
+                current_target_string="linux_x32"
+            }
+    }
+    else if(osname.toLowerCase().contains("osx")){
+            if(osarch.endsWith("64"))
+            {
+                current_target_string="osx_x64"
+            }
+            else if(osarch.endsWith("32"))
+            {
+                current_target_string="osx_x32"
+            }
+    }
+    if(current_target_string==""){
+        throw new GradleScriptException("Failed to determine current platform")
+    }
+    return current_target_string
+}
+
 if (JAVA_JDK == null)
 	throw new GradleException("JAVA_HOME undefined, set it to point to the jdk folder")
 
 configurations{
 	external
+	local
 }
 
-repositories{
-	ivy{
- 		ivyPattern      'http://build.rahmn.net:8080/guestAuth/repository/download/[module]/[revision]/teamcity-ivy.xml'
-        	artifactPattern 'http://build.rahmn.net:8080/guestAuth/repository/download/[module]/[revision]/[artifact](.[ext])'
-	}
-}
 
 dependencies {
-	external('org:Mathlibra_BuildMaster:lastSuccessful') {
-		artifact {
-			name= 'mathlibra'
-			type= 'zip'
-		}
-	}
+	local files("mathlibra.zip")
 }
 
 task copyDependency(type: Copy){
-	def zipPath =configurations.external.find {it.name.startsWith("mathlibra")}
+
+	def zipPath = configurations.local.find {it.name.startsWith("mathlibra.zip")}
+	if(!file(zipPath).exists())
+	{
+		println("\nCould not find mathlibra.zip\nThis file contains the mathlibra binaries needed for this project.\nIt is produced by running the zip task on mathlibra")
+		throw new GradleException("Mathlibra.zip not found!")
+	}
 	from zipTree(file(zipPath))
 	into "$buildDir/download/"
 }	
 
 
 model{
+        tasks{
+            currentLibs(Copy){
+                   dependsOn $.binaries.withType(SharedLibraryBinarySpec).findAll(
+                                    {
+                                        it.targetPlatform.name.contains("current") && 
+                                        it.toString().contains("mathlibraJ") && 
+                                        it.buildType.name.contains("release")
+                                    })
+				if(new File("$buildDir/download/mathlibra_CXX/shared/current/release/").exists())
+				{
+					from "$buildDir/download/mathlibra_CXX/shared/current/release/"
+				}
+				else{
+					from "$buildDir/download/mathlibra_CXX/shared/" +getCurrent() + "/release/"
+				}
+                from "$buildDir/libs/mathlibraJ/shared/current/release/"
+                into "$buildDir/currentLibs/"
+            }
+        }
+
+	toolChains {
+		arm(Gcc){
+			if (project.hasProperty('ndktoolchain'))
+				path project.properties['ndktoolchain']
+			target("armeabiv7a")
+		}
+		gcc(Gcc){
+			target("linux_x86"){
+			
+				cppCompiler.withArguments { args ->
+					args << "-m32" 
+				}
+				linker.withArguments { args ->
+					args << "-m32" 
+				}
+			}
+			target("linux_x64"){
+				cppCompiler.withArguments { args ->
+					args << "-m64" 
+				}
+				linker.withArguments { args ->
+					args << "-m64" 
+				}
+			}
+		}
+		mingw(Gcc){
+				target("windows_x86")
+				target("windows_x64")
+		}
+		clang(Clang){
+			target("osx_x86")
+			target("osx_x64")
+		}
+		
+	}
+	
+	platforms {
+		armeabiv7a{
+			architecture "arm"
+			operatingSystem "linux"
+		}
+		linux_x86{
+			architecture "x86"
+			operatingSystem "linux"
+		}
+		linux_x64{
+			architecture "x86_64"
+			operatingSystem "linux"
+		}
+		windows_x86 {
+                 architecture "x86"
+                 operatingSystem "windows"
+        }
+        windows_x64 {
+                 architecture "x86_64"
+                 operatingSystem "windows"
+        }
+        osx_x86 {
+                 architecture "x86"
+                 operatingSystem "osx"
+        }
+        osx_x64 {
+                 architecture "x86_64"
+                 operatingSystem "osx"
+        }
+        current{
+		}
+	}	
+
 	buildTypes{
 		debug
 		release
 	}
   	binaries{
 	all{
-		println it.name
+			if(!((targetPlatform.getName() == "current") || (project.hasProperty(targetPlatform.getName())))){
+				buildable = false
+			}	
+			if (targetPlatform == platforms.current){
+				for(NativePlatform p : platforms){
+					if(project.hasProperty(p.getName())){
+						buildable = false
+					}
+				}
+			}
+			if (buildable && targetPlatform.getName()=="armeabiv7a" && !project.hasProperty('ndktoolchain')){
+				buildable = false
+				throw new GradleException("No ndktoolchain set")
+			}
           if(toolChain in Gcc)
           {
 		
                   if(buildType == buildTypes.release)
                   {
-                          cppCompiler.args "-std=c++11", "-O2", "-Wall", "-pedantic", "-I$rootProject.JAVA_JDK/include", "-I$rootProject.JAVA_JDK/include/$targetPlatform.operatingSystem.name"
+
+                          cppCompiler.args "-std=c++11", "-O2", "-Wall", "-pedantic", "-I$rootProject.JAVA_JDK/include", "-I$rootProject.JAVA_JDK/include/" + targetPlatform.operatingSystem.name.toLowerCase()
                           linker.args "-ldl"
                   }
                   else
                   {
-                          cppCompiler.args "-std=c++11", "-Wall", "-pedantic", "-g","-I$rootProject.JAVA_JDK/include", "-I$rootProject.JAVA_JDK/include/$targetPlatform.operatingSystem.name"
-
+                          cppCompiler.args "-std=c++11", "-Wall", "-pedantic", "-g","-I$rootProject.JAVA_JDK/include", "-I$rootProject.JAVA_JDK/include/" + targetPlatform.operatingSystem.name.toLowerCase()
                           linker.args "-ldl"
                   }
         }
 	}
 	}
 	components {
-		
+	        mathlibraJAPI(JvmLibrarySpec){
+                        sources {
+                            jsource(JavaSourceSet) {
+                                    source.srcDir "java/src"
+                                }   
+                            }
+                }
 		
 		mathlibraJ(NativeLibrarySpec){
+			targetPlatform "armeabiv7a"
+			targetPlatform "linux_x86"
+			targetPlatform "linux_x64"
+			targetPlatform "windows_x86"
+			targetPlatform "windows_x64"
+			targetPlatform "osx_x86"
+			targetPlatform "osx_x64"
+			targetPlatform "current"
 			binaries.withType(StaticLibraryBinarySpec){bin -> bin.buildable= false}
 			binaries.all
 			{
 				if(toolChain in Gcc)
 				{
 					cppCompiler.args "-I$buildDir/download/mathlibra_CXX/include/"
-					print buildType
-					linker.args "-lmathlibra_CXX","-L$buildDir/download/mathlibra_CXX/shared/release/"
+                                        if(targetPlatform == platforms.current){
+					    linker.args "-lmathlibra_CXX","-L$buildDir/download/mathlibra_CXX/shared/" +getCurrent() + "/release/", "-L$buildDir/download/mathlibra_CXX/shared/current/release/" ,  "-Wl,-rpath,./build/currentLibs"
+                                        }
+                                        else{
+                                            linker.args "-lmathlibra_CXX","-L$buildDir/download/mathlibra_CXX/shared/$targetPlatform.name/release/"
+                                        }
 				}
+                                
 			}
 			sources{
 				cpp{
