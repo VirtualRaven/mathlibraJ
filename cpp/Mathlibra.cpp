@@ -34,6 +34,11 @@ JNIEXPORT void JNICALL Java_net_rahmn_mathlibra_Mathlibra_setArg
     auto strd=env->GetStringUTFChars(str,NULL);
     hwn->set_arg(strd);
     env->ReleaseStringUTFChars(str,strd);
+    if(hwn->exceptionOccured())
+    {
+        NativeComponents::mathlibra_throw_jni(env,hwn->get_exception_info());
+    }
+    
 }
 
 
