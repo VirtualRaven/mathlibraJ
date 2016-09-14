@@ -13,18 +13,21 @@ public class FunctionData {
                 ", tag='" + tag + '\'' +
                 ", doc='" + doc + '\'' +
                 ", displayName='" + displayName + '\'' +
+                ", signature='" + signature + '\'' +
                 '}';
     }
 
-    public FunctionData(String name, String tag, String doc, String displayName) {
+    public FunctionData(String name, String tag, String doc, String displayName,String signature) {
         this.name = name;
         this.tag = tag;
         this.doc = doc;
         this.displayName = displayName;
+        this.signature = signature;
     }
 
     public String name;
     public String tag;
     public String doc;
     public String displayName;
+    public String signature;
 }

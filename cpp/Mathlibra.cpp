@@ -121,7 +121,8 @@ JNIEXPORT jobjectArray JNICALL Java_net_rahmn_mathlibra_Mathlibra_getFunctions
                                      env->NewStringUTF(c.name.c_str()),
                                      env->NewStringUTF(c.tag.c_str()),
                                      env->NewStringUTF(c.doc.c_str()),
-                                     env->NewStringUTF(c.disp_name.c_str())
+                                     env->NewStringUTF(c.disp_name.c_str()),
+                                     env->NewStringUTF(c.signature.c_str())
             );
             if(funcData==NULL)
                 return NULL;

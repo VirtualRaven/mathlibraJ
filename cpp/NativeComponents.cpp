@@ -46,7 +46,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved)
     }
     NativeComponents::FunctionDataC =genv->GetMethodID(NativeComponents::FunctionData,
                                                        "<init>",
-                                                       "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+                                                       "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
     if(NativeComponents::FunctionDataC==NULL)
     {
         return -1;
